@@ -246,8 +246,8 @@ public class MainActivity extends Activity implements OnClickListener {
 				}
 			}
 
-			if (mIndex != -1)
-				devStateTB[mIndex].setEnabled(true);
+//			if (mIndex != -1)
+//				devStateTB[mIndex - 1].setEnabled(true);
 
 		}
 	}
@@ -276,11 +276,17 @@ public class MainActivity extends Activity implements OnClickListener {
 			Toast.makeText(context, "light4 " + "not connected yet!",
 					Toast.LENGTH_SHORT).show();
 		} else if (v.equals(devStateTB[4])) {
-			Toast.makeText(context, "light5 " + "not connected yet!",
-					Toast.LENGTH_SHORT).show();
+			new SwitchDevice(4)
+			.execute(devStateTB[4].getText().equals("ON") ? STATE_ON
+					: STATE_OFF, 5);
+//			Toast.makeText(context, "light5 " + "not connected yet!",
+//					Toast.LENGTH_SHORT).show();
 		} else if (v.equals(devStateTB[5])) {
-			Toast.makeText(context, "light6 " + "not connected yet!",
-					Toast.LENGTH_SHORT).show();
+			new SwitchDevice(5)
+					.execute(devStateTB[5].getText().equals("ON") ? STATE_ON
+							: STATE_OFF, 6);
+//			Toast.makeText(context, "light6 " + "not connected yet!",
+//					Toast.LENGTH_SHORT).show();
 		} else if (v.equals(refreshB)) {
 			syncStatus();
 		}
