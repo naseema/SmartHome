@@ -19,17 +19,25 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -41,6 +49,9 @@ public class MainActivity extends Activity implements OnClickListener {
 	public static final String RESPONSE_DEVICE_OFFLINE_BODY = ":(";
 	public static final String RESPONSE_DEVICE_ONLINE_BODY = ":)";
 	public static final String APP_TAG = "SMART_HOME";
+	
+	public static String USER_ID = "nas!K2310Gf";
+	public static  final String PREF_USER_ID = "pref_user_id";
 
 	public static final String URL_DEVICE_AGENT = "https://agent.electricimp.com/I8Kh0YqqYUy8";
 
@@ -60,6 +71,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	ProgressDialog connectingDialog;
 
 	ProgressBar mProgressBar;
+	SharedPreferences mSharedPrefs;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,29 +80,11 @@ public class MainActivity extends Activity implements OnClickListener {
 		setContentView(R.layout.activity_main);
 
 		context = this;
+  	  	
+		mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+		USER_ID = mSharedPrefs.getString(PREF_USER_ID, USER_ID);
 
 		mProgressBar = (ProgressBar)findViewById(R.id.progressBar1);
-		// StrictMode.ThreadPolicy policy = new
-		// StrictMode.ThreadPolicy.Builder().permitAll().build();
-		// StrictMode.setThreadPolicy(policy);
-
-		// tg1 = (ToggleButton) findViewById(R.id.ToggleButton1);
-		// tg2 = (ToggleButton) findViewById(R.id.toggleButton2);
-
-		// new AlertDialog.Builder(this)
-		// .setTitle("Refreshing Status...")
-		// .setMessage("Refreshing Status...")
-		// .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-		// public void onClick(DialogInterface dialog, int which) {
-		// // continue with delete
-		// }
-		// })
-		// .setNegativeButton("No", new DialogInterface.OnClickListener() {
-		// public void onClick(DialogInterface dialog, int which) {
-		// // do nothing
-		// }
-		// })
-		// .show();
 
 		refreshB = (Button) findViewById(R.id.refresh_b);
 		refreshB.setOnClickListener(this);
@@ -122,22 +116,17 @@ public class MainActivity extends Activity implements OnClickListener {
 		syncStatus();
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
+
 
 	public int postData(int value, int index) {
 		// Create a new HttpClient and Post Header
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpPost httppost;
 		if (index == -1)
-			httppost = new HttpPost(URL_DEVICE_AGENT + "?status=0");
+			httppost = new HttpPost(URL_DEVICE_AGENT + "?status=0" + "&uid=" + USER_ID);
 		else
 			httppost = new HttpPost(URL_DEVICE_AGENT + "?dev" + index + "="
-					+ value);
+					+ value + "&uid=" + USER_ID);
 
 		try {
 			// Add your data
@@ -216,6 +205,8 @@ public class MainActivity extends Activity implements OnClickListener {
 		protected void onPostExecute(Integer result) {
 			Log.i(APP_TAG, "switchDevice::Result->index=" + mIndex+ ", result=" + result);
 
+			
+			
 			waitingRequest--;
 			mProgressBar.setProgress(mProgressBar.getMax() - waitingRequest);
 //			ObjectAnimator animation = ObjectAnimator.ofInt(mProgressBar, "progress", mProgressBar.getProgress(),mProgressBar.getMax() - waitingRequest*10); 
@@ -223,7 +214,9 @@ public class MainActivity extends Activity implements OnClickListener {
 //		    animation.setInterpolator(new DecelerateInterpolator());
 //		    animation.start();
 			
+			
 			if (waitingRequest == 0) {
+
 				if (mIndex != -1 || tryToRefresh == true) {
 					tryToRefresh = false;
 					new SwitchDevice(-1).execute(STATE_ON, -1, null);
@@ -237,6 +230,14 @@ public class MainActivity extends Activity implements OnClickListener {
 				refreshButtonStatus();
 				refreshB.setEnabled(true);
 				refreshB.setText("Manual refresh");
+
+				if (result == RES_ERR) {
+					Toast.makeText(context, "Connection err, see logs!!",
+							Toast.LENGTH_LONG).show();
+					setEnableAvaliableButtons(false);
+					return;
+				}
+				
 				if (devState[0] == -1) {
 					Toast.makeText(context, "Your Imp offline!!",
 							Toast.LENGTH_LONG).show();
@@ -365,6 +366,63 @@ public class MainActivity extends Activity implements OnClickListener {
 		setProgressBarIndeterminateVisibility(true);
 		tryToRefresh = true;
 		new SwitchDevice(-1).execute(STATE_ON, -1);
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		 return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch(item.getItemId())
+	    {
+	    case R.id.edit_your_id:
+	    	LayoutInflater li = LayoutInflater.from(context);
+
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+					context);
+
+			final EditText userInput = new EditText(context);
+	    	  
+	    	  ;
+	    	  
+			userInput.setText(mSharedPrefs.getString(PREF_USER_ID, USER_ID));
+			
+			// set prompts.xml to alertdialog builder
+			alertDialogBuilder.setView(userInput);
+
+
+			
+	    	alertDialogBuilder.setTitle("Changing user id")
+//	    	.setMessage("your current user id: " + USER_ID)
+			.setCancelable(false)
+			.setPositiveButton("Save",
+			  new DialogInterface.OnClickListener() {
+			    public void onClick(DialogInterface dialog,int id) {
+			    	Editor editor = mSharedPrefs.edit();
+			    	USER_ID = userInput.getText() + "";
+			    	editor.putString(PREF_USER_ID, USER_ID);
+			    	editor.commit();
+			    }
+			  })
+			.setNegativeButton("Cancel",
+			  new DialogInterface.OnClickListener() {
+			    public void onClick(DialogInterface dialog,int id) {
+				dialog.cancel();
+			    }
+			  });
+
+		// create alert dialog
+		AlertDialog alertDialog = alertDialogBuilder.create();
+
+		// show it
+		alertDialog.show();
+	        break;
+	    }
+	    return true;
 	}
 
 }

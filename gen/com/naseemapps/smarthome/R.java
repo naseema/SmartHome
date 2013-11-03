@@ -32,13 +32,13 @@ public final class R {
     }
     public static final class id {
         public static final int LinearLayout1=0x7f080000;
-        public static final int action_settings=0x7f080009;
         public static final int dev1_tb=0x7f080003;
         public static final int dev2_tb=0x7f080004;
         public static final int dev3_tb=0x7f080005;
         public static final int dev4_tb=0x7f080006;
         public static final int dev5_tb=0x7f080007;
         public static final int dev6_tb=0x7f080008;
+        public static final int edit_your_id=0x7f080009;
         public static final int progressBar1=0x7f080001;
         public static final int refresh_b=0x7f080002;
     }
@@ -51,6 +51,7 @@ public final class R {
     public static final class string {
         public static final int action_settings=0x7f050001;
         public static final int app_name=0x7f050000;
+        public static final int edit_your_id=0x7f050003;
         public static final int hello_world=0x7f050002;
     }
     public static final class style {
