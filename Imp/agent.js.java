@@ -1,50 +1,76 @@
 
+ValidUserID <- ["nas!K2310Gf","kre!Kr20Y!ui"];
+
 statDev1 <- -1;
-statDev2 <- -1;
+statDev2 <- -1; 
 statDev3 <- -1;
-statDev4 <- -1;
+statDev4 <- -1; 
 statDev5 <- -1;
 statDev6 <- -1;
 
+STATUS_OFFLINE <- "-1,-1,-1,-1,-1,-1";
+
 statOnline <- 0;
 
+function getDeviceStatus() {
+    return    statDev1 + "," + statDev2 + ","+ statDev3 
+        + ","+ statDev4 + ","+ statDev5 + ","+ statDev6;
+}
+
+/**Check if the givin user id is valid*/
+function isValidID(id) {
+    foreach (i,val in ValidUserID)
+    {
+        if (val == id) {
+            return true;
+        }
+    }
+    return false;
+}
 
 function requestHandler(request, response) {
-    // if (device.isconnected()){
-    //     // if device is connected, set backgroundColor to green
-    //     server.log("online");
-    // } 
-    // else {
-    //     // if device is disconnected, set background color to red
-    //     server.log("offline");
-    // }
+
 
 
 
 
 
   try {
+    
+    if ("uid" in request.query && isValidID(request.query.uid)) {
+        server.log(" @ Getting request from:" + request.query.uid);
+    } else {
+        server.log("### err: Getting invalid request"+ "###");
+        response.send(200, "..."); 
+        server.log(" @ Getting request from:" + request.query.uid);
+        return;
+    }
+      
+    if (!device.isconnected()){
+        response.send(200, STATUS_OFFLINE);        // if device is connected, set backgroundColor to green
+        server.log("### err: Getting request our device is OFFLINE." + "###");
+        return;
+    } 
+    
     // Check if your Imp connecting by sending him message...
     device.send("isOnline","");
     if (statOnline == 0) {
-        server.log("!!!!!!!!!!!!!!!!!!!!device disconnected from agent");
-        response.send(200, ":(");
+        server.log("### err: Device disconnected from agent" + "###");
         statDev1 <- -1;
         statDev2 <- -1;
         statDev3 <- -1;
         statDev4 <- -1;
         statDev5 <- -1;
         statDev6 <- -1;
+        response.send(200, getDeviceStatus());
         return;
     }
     statOnline = 0;
 
     
     if ("status" in request.query) {
-        response.send(200, statDev1 + "," + statDev2 + ","+ statDev3 
-        + ","+ statDev4 + ","+ statDev5 + ","+ statDev6);
-        server.log("### Device status :" + statDev1 + "," + statDev2 
-        + ","+ statDev3 + ","+ statDev4 + ","+ statDev5 + ","+ statDev6);
+        response.send(200, getDeviceStatus());
+        server.log("@Device status request:" + getDeviceStatus());
         // getting pin status from Imp
         device.send("status",""); 
         return;
@@ -98,29 +124,91 @@ function requestHandler(request, response) {
         device.send("status",""); 
       }
     
+    } else if ("dev4" in request.query) {
+      
+      // if they did, and dev3=1.. set our variable to 1
+      if (request.query.dev4 == "1" || request.query.dev4 == "0") {
+        // convert the dev2 query parameter to an integer
+        local dev4 = request.query.dev4.tointeger();
+ 
+        // send "dev2" message to device, and send ledState as the data
+        device.send("dev4", dev4); 
+        device.send("status",""); 
+      }
+    
+    } else if ("dev5" in request.query) {
+      
+      // if they did, and dev3=1.. set our variable to 1
+      if (request.query.dev5 == "1" || request.query.dev5 == "0") {
+        // convert the dev2 query parameter to an integer
+        local dev5 = request.query.dev5.tointeger();
+ 
+        device.send("dev5", dev5); 
+        device.send("status",""); 
+      }
+    
+    } else if ("dev6" in request.query) {
+      
+      // if they did, and dev3=1.. set our variable to 1
+      if (request.query.dev6 == "1" || request.query.dev6 == "0") {
+        // convert the dev2 query parameter to an integer
+        local dev6 = request.query.dev6.tointeger();
+ 
+        device.send("dev6", dev6); 
+        device.send("status",""); 
+      }
+    
     } else {
-        server.log("dev not found");
-        server.log(request.body);
+        server.log("### err: dev not found ###");
+        server.log("body:" + request.body);
     }
     
     // send a response back saying everything was OK.
-    response.send(200, "::)");
+    response.send(200, getDeviceStatus());
   } catch (ex) {
-    server.log("err" + ex);
+    server.log("### err: " + ex + "###");
 
-    response.send(500, "Internal Server Error: " + ex);
+    response.send(500, "ERROR");
   }
 }
 
 function writeStatus(status) {
+    local res = "";
+    if ( statDev1 != status[0]) {
+        res += "[1]:" + statDev1 + "-> "+ status[0];
+    }
+    if ( statDev2 != status[1]) {
+        res += ",[2]:" + statDev2 + "-> "+ status[1];
+    }
+    if ( statDev3 != status[2]) {
+        res += ",[3]:" + statDev3 + "-> "+ status[2];
+    }
+    if ( statDev4 != status[3]) {
+        res += ",[4]:" + statDev4 + "-> "+ status[3];
+    }
+    if ( statDev5 != status[4]) {
+        res += ",[5]:" + statDev5 + "-> "+ status[4];
+    }
+    if ( statDev6 != status[5]) {
+        res += ",[6]:" + statDev6 + "-> "+ status[5];
+    }
+    if (res != "") {
+        server.log("### Device status changed: " + res);
+    }
+    
+    // server.log("### Device status :[1]:" + statDev1 + "-> "+ status[0] 
+    // + ",[2]:" + statDev2 + "-> "+ status[1]
+    // + ",[3]:" + statDev3 + "-> "+ status[2] 
+    // + ",[4]:" + statDev4 + "-> "+ status[3] 
+    // + ",[5]:" + statDev5 + "-> "+ status[4] 
+    // + ",[6]:" + statDev6 + "-> "+ status[5] );
+    
     statDev1 = status[0];
     statDev2 = status[1];
     statDev3 = status[2];
     statDev4 = status[3];
     statDev5 = status[4];
     statDev6 = status[5];
-    server.log("### updated Device status :" + statDev1 + "," + statDev2 
-        + ","+ statDev3 + ","+ statDev4 + ","+ statDev5 + ","+ statDev6);
         
     // server.log("IMP STATUS: " + status[0] + "," + status[1]+ "," + status[2]
     // + "," + status[3]+ "," + status[4]+ "," + status[5]);
@@ -135,6 +223,8 @@ device.on("status",writeStatus);
 http.onrequest(requestHandler);
 
 device.onconnect(function() {
+    device.send("isOnline","");
+    device.send("status",""); 
     server.log("device connected to agent");
 });
  
@@ -142,6 +232,6 @@ device.ondisconnect(function() {
     server.log("device disconnected from agent");
 });
 device.on("isOnline",function (notUsed) {
-        server.log("!!!!!!!!!!!!!!!!!!!!device connected to agent");
+        // server.log("!!!!!!!!!!!!!!!!!!!!device connected to agent");
     statOnline = 1;
 });
