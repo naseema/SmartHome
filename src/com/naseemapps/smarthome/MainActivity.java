@@ -50,7 +50,8 @@ public class MainActivity extends Activity implements OnClickListener {
 	public static final String RESPONSE_DEVICE_ONLINE_BODY = ":)";
 	public static final String APP_TAG = "SMART_HOME";
 	
-	public static String USER_ID = "nas!K2310Gf";
+	//nas!K2310Gf
+	public static String USER_ID = "";
 	public static  final String PREF_USER_ID = "pref_user_id";
 
 	public static final String URL_DEVICE_AGENT = "https://agent.electricimp.com/I8Kh0YqqYUy8";
