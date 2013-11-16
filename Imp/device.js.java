@@ -26,32 +26,52 @@ function setDev1(dev1State) {
 function setDev2(dev2State) {
   server.log("Set dev2: " + dev2State);
   dev2.write(dev2State);
-  
 }
+ 
+
+
 
 function setDev3(dev3State) {
   server.log("Set dev3: " + dev3State);
   dev3.write(dev3State);
+
 }
 
 function setDev4(dev4State) {
   server.log("Set dev4: " + dev4State);
   dev4.write(dev4State);
+
 }
 
 function setDev5(dev5State) {
     server.log("Set dev5: " + dev5State);
     dev5.write(dev5State);
+    if (dev5State == 0) {
+        imp.wakeup(2.0, turnOff5);
+    }
 }
 
 function setDev6(dev6State) {
     server.log("Set dev6: " + dev6State);
     dev6.write(dev6State);
+    if (dev6State == 0) {
+        imp.wakeup(2.0, turnOff6);
+    }
 }
 
 function getStatus(notUsed) {
     agent.send("status", [dev1.read(), dev2.read(), dev3.read()  
                         , dev4.read(), dev5.read(), dev6.read()]);
+}
+
+function turnOff5() {
+  server.log("auto turn off: Set dev5: " + 1);
+  dev5.write(1);
+}
+
+function turnOff6() {
+  server.log("auto turn off: Set dev6: " + 1);
+  dev6.write(1);
 }
 
  

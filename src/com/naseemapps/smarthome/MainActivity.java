@@ -54,7 +54,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	public static String USER_ID = "";
 	public static  final String PREF_USER_ID = "pref_user_id";
 
-	public static final String URL_DEVICE_AGENT = "https://agent.electricimp.com/I8Kh0YqqYUy8";
+	public static final String URL_DEVICE_AGENT = "https://agent.electricimp.com/QFeMApxRq1JS";
 
 	//
 	public static final int STATE_ON = 0;
@@ -340,7 +340,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 
 	private void refreshButtonStatus() {
-		for (int i = 0; i < devState.length; i++) {
+		for (int i = 0; i < devState.length -2 ; i++) {
 			if (devState[i] == -1) {
 				devStateTB[i].setEnabled(false);
 			} else {
@@ -348,6 +348,9 @@ public class MainActivity extends Activity implements OnClickListener {
 
 			}
 		}
+		devStateTB[4].setChecked(false);
+		devStateTB[5].setChecked(false);
+		
 	}
 
 	private void setEnableAvaliableButtons(boolean stat) {

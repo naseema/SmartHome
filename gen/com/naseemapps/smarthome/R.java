@@ -24,23 +24,28 @@ public final class R {
         public static final int electricity=0x7f020000;
         public static final int electricity128=0x7f020001;
         public static final int electricity_clicked=0x7f020002;
-        public static final int ic_launcher=0x7f020003;
-        public static final int launcher=0x7f020004;
-        public static final int light_off=0x7f020005;
-        public static final int light_on=0x7f020006;
-        public static final int smart_home_icon=0x7f020007;
+        public static final int gate1_selector=0x7f020003;
+        public static final int gate2_selector=0x7f020004;
+        public static final int gate_1_lft_to_rght=0x7f020005;
+        public static final int gate_2_rght_to_lft=0x7f020006;
+        public static final int ic_launcher=0x7f020007;
+        public static final int launcher=0x7f020008;
+        public static final int light_off=0x7f020009;
+        public static final int light_on=0x7f02000a;
+        public static final int smart_home_icon=0x7f02000b;
     }
     public static final class id {
         public static final int LinearLayout1=0x7f080000;
-        public static final int dev1_tb=0x7f080003;
-        public static final int dev2_tb=0x7f080004;
-        public static final int dev3_tb=0x7f080005;
-        public static final int dev4_tb=0x7f080006;
-        public static final int dev5_tb=0x7f080007;
-        public static final int dev6_tb=0x7f080008;
-        public static final int edit_your_id=0x7f080009;
+        public static final int dev1_tb=0x7f080004;
+        public static final int dev2_tb=0x7f080005;
+        public static final int dev3_tb=0x7f080006;
+        public static final int dev4_tb=0x7f080007;
+        public static final int dev5_tb=0x7f080008;
+        public static final int dev6_tb=0x7f080009;
+        public static final int edit_your_id=0x7f08000a;
         public static final int progressBar1=0x7f080001;
         public static final int refresh_b=0x7f080002;
+        public static final int scrollView1=0x7f080003;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;

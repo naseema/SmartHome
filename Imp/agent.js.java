@@ -1,11 +1,11 @@
 
-ValidUserID <- ["nas!K2310Gf","kre!Kr20Y!ui"];
+ValidUserID <- ["nas!K2310Gf", "kre", "mo123Q"];
 
 statDev1 <- -1;
 statDev2 <- -1; 
 statDev3 <- -1;
 statDev4 <- -1; 
-statDev5 <- -1;
+statDev5 <- -1; 
 statDev6 <- -1;
 
 STATUS_OFFLINE <- "-1,-1,-1,-1,-1,-1";
@@ -26,7 +26,7 @@ function isValidID(id) {
         }
     }
     return false;
-}
+} 
 
 function requestHandler(request, response) {
 
@@ -83,7 +83,7 @@ function requestHandler(request, response) {
       if (request.query.dev1 == "1" || request.query.dev1 == "0") {
         // convert the dev1 query parameter to an integer
         local dev1 = request.query.dev1.tointeger();
- 
+
         // send "dev1" message to device, and send ledState as the data
         device.send("dev1", dev1); 
         device.send("status",""); 
@@ -221,11 +221,17 @@ device.on("status",writeStatus);
  
 // register the HTTP handler
 http.onrequest(requestHandler);
-
+ 
 device.onconnect(function() {
     device.send("isOnline","");
     device.send("status",""); 
     server.log("device connected to agent");
+    device.send("dev1", 1); 
+    device.send("dev2", 1);  
+    device.send("dev3", 1); 
+    device.send("dev4", 1); 
+    device.send("dev5", 1); 
+    device.send("dev6", 1); 
 });
  
 device.ondisconnect(function() {

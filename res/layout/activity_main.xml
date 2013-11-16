@@ -14,8 +14,8 @@
         android:id="@+id/progressBar1"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:visibility="gone"/>
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/refresh_b"
@@ -23,48 +23,55 @@
         android:layout_height="wrap_content"
         android:text="Manual refresh" />
 
-    <ToggleButton
-        android:id="@+id/dev1_tb"
+    <ScrollView
+        android:id="@+id/scrollView1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-        android:visibility="invisible"
-         />
-    <ToggleButton
-        android:id="@+id/dev2_tb"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-         />
- 
-    <ToggleButton
-        android:id="@+id/dev3_tb"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-         />
- 
-    <ToggleButton
-        android:id="@+id/dev4_tb"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-        android:visibility="invisible"
-         />
- 
-    <ToggleButton
-        android:id="@+id/dev5_tb"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-        android:visibility="invisible"
-         /> 
-    <ToggleButton
-        android:id="@+id/dev6_tb"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-        android:visibility="invisible"
-         />
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <ToggleButton
+                android:id="@+id/dev1_tb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false" />
+
+            <ToggleButton
+                android:id="@+id/dev2_tb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false" />
+
+            <ToggleButton
+                android:id="@+id/dev3_tb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false" />
+
+            <ToggleButton
+                android:id="@+id/dev4_tb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false" />
+
+            <ToggleButton
+                android:id="@+id/dev5_tb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/gate_1_lft_to_rght"
+                android:enabled="false" />
+
+            <ToggleButton
+                android:id="@+id/dev6_tb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/gate_2_rght_to_lft"
+                android:enabled="false" />
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
